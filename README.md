@@ -1,42 +1,54 @@
 
 # Rapport
 
-**Skriv din rapport här!**
+Tanken med appen är att spara en string från secondActivity och sedan presentera den i mainActivity genom att använda sig av shared preferences. 
 
-_Du kan ta bort all text som finns sedan tidigare_.
-
-## Följande grundsyn gäller dugga-svar:
-
-- Ett kortfattat svar är att föredra. Svar som är längre än en sida text (skärmdumpar och programkod exkluderat) är onödigt långt.
-- Svaret skall ha minst en snutt programkod.
-- Svaret skall inkludera en kort övergripande förklarande text som redogör för vad respektive snutt programkod gör eller som svarar på annan teorifråga.
-- Svaret skall ha minst en skärmdump. Skärmdumpar skall illustrera exekvering av relevant programkod. Eventuell text i skärmdumpar måste vara läsbar.
-- I de fall detta efterfrågas, dela upp delar av ditt svar i för- och nackdelar. Dina för- respektive nackdelar skall vara i form av punktlistor med kortare stycken (3-4 meningar).
-
-Programkod ska se ut som exemplet nedan. Koden måste vara korrekt indenterad då den blir lättare att läsa vilket gör det lättare att hitta syntaktiska fel.
-
+Layouten för mainActivity är främst uppbyggd med en textView och en button. Första gången man öppnar appen kommer textViewen endast att innehålla ett heej, men genom att klicka på knappen kommer användaren till sida nummer två med hjälp av koden:
 ```
-function errorCallback(error) {
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-            // Geolocation API stöds inte, gör något
-            break;
-        case error.POSITION_UNAVAILABLE:
-            // Misslyckat positionsanrop, gör något
-            break;
-        case error.UNKNOWN_ERROR:
-            // Okänt fel, gör något
-            break;
+next.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        Intent i = new Intent(MainActivity.this, Second.class);
+        startActivity(i);
     }
-}
+});
+```
+En Clicklistener aktiveras då man klickar på knappen som den hör till.
+
+![](1.png) 
+**Bild 1:** Startsida första gången man startar appen
+
+När användaren skickats till nästa sida bes den att skriva in sitt namn i en editText. Då användaren klickar på spara-knappen sparas namnet som en string i våran shared preference:
+```
+EditText newPrefText=new EditText(this);
+newPrefText=(EditText)findViewById(R.id.settingseditview);
+myPreferenceEditor.putString("MyAppPreferenceString", newPrefText.getText().toString());
+myPreferenceEditor.apply();
+    ...
 ```
 
-Bilder läggs i samma mapp som markdown-filen.
+![](2.png)
+**Bild 2:** Andra sidan
 
-![](android.png)
+När namnet har sparats kommer en textView som berättar för användaren att det angivna namnet har sparats:
+```
+TextView prefTextRef=new TextView(this);
+prefTextRef=(TextView)findViewById(R.id.prefText);
+prefTextRef.setText(myPreferenceRef.getString("MyAppPreferenceString", "No preference found.") + " ditt namn är nu sparat");
+```
 
-Läs gärna:
+![](3.png)
+**Bild 3:** Sparat namn
 
-- Boulos, M.N.K., Warren, J., Gong, J. & Yue, P. (2010) Web GIS in practice VIII: HTML5 and the canvas element for interactive online mapping. International journal of health geographics 9, 14. Shin, Y. &
-- Wunsche, B.C. (2013) A smartphone-based golf simulation exercise game for supporting arthritis patients. 2013 28th International Conference of Image and Vision Computing New Zealand (IVCNZ), IEEE, pp. 459–464.
-- Wohlin, C., Runeson, P., Höst, M., Ohlsson, M.C., Regnell, B., Wesslén, A. (2012) Experimentation in Software Engineering, Berlin, Heidelberg: Springer Berlin Heidelberg.
+Användaren kan sedan gå tillbaka till första sidan genom att klicka på knappen "tillbaka", då kommer det sparade namnet dyka upp i textViewen t.ex. "Heej Cazzie". Om användaren skulle vilja stänga ner appen efter den skrivit in sitt namn kommer appen att vid nästa gång den startas att komma ihåg användarens namn och kommer då presenterat det som tidigare beskrivits.
+```
+myPreferenceRef = getSharedPreferences("MyPreferencesName", MODE_PRIVATE);
+myPreferenceEditor = myPreferenceRef.edit();
+
+TextView prefTextRef=new TextView(this);
+prefTextRef=(TextView)findViewById(R.id.prefText2);
+prefTextRef.setText("Heeej "+ myPreferenceRef.getString("MyAppPreferenceString", "!"));
+```
+
+![](4.png)
+**Bild 4:** Om man går tillbaka eller startar appen på nytt
