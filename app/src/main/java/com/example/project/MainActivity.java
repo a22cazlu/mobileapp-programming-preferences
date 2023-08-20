@@ -5,15 +5,16 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
 
-    private SharedPreferences myPreferenceRef;
-    private SharedPreferences.Editor myPreferenceEditor;
-
+    SharedPreferences myPreferenceRef;
+    SharedPreferences.Editor myPreferenceEditor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        myPreferenceRef = getPreferences(MODE_PRIVATE);
-        myPreferenceEditor = myPreferenceRef.edit();
+        // Get a reference to the shared preference
+
 
         Button next = findViewById(R.id.button);
 
@@ -34,7 +35,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        myPreferenceRef = getSharedPreferences("MyPreferencesName", MODE_PRIVATE);
+        myPreferenceEditor = myPreferenceRef.edit();
+
+// Display preferences
+        TextView prefTextRef=new TextView(this);
+        prefTextRef=(TextView)findViewById(R.id.prefText2);
+        prefTextRef.setText("Heeej "+ myPreferenceRef.getString("MyAppPreferenceString", "!"));
 
     }
+
+
 
 }
