@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Get a reference to the shared preference
 
 
         Button next = findViewById(R.id.button);
@@ -38,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         myPreferenceRef = getSharedPreferences("MyPreferencesName", MODE_PRIVATE);
         myPreferenceEditor = myPreferenceRef.edit();
 
-// Display preferences
         TextView prefTextRef=new TextView(this);
         prefTextRef=(TextView)findViewById(R.id.prefText2);
         prefTextRef.setText("Heeej "+ myPreferenceRef.getString("MyAppPreferenceString", "!"));
